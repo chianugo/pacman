@@ -51,6 +51,8 @@ const pacman = new Pacman({
   velocity: { x: 0, y: 0 },
 });
 
+let lastDirection = "";
+
 const keys = {
   up: {
     pressed: false,
@@ -103,13 +105,13 @@ const animate = () => {
   pacman.velocity.y = 0;
   pacman.velocity.x = 0;
 
-  if (keys.up.pressed) {
+  if (keys.up.pressed && lastDirection === "up") {
     pacman.velocity.y = -3;
-  } else if (keys.left.pressed) {
+  } else if (keys.left.pressed && lastDirection === "left") {
     pacman.velocity.x = -3;
-  } else if (keys.down.pressed) {
+  } else if (keys.down.pressed && lastDirection === "down") {
     pacman.velocity.y = 3;
-  } else if (keys.right.pressed) {
+  } else if (keys.right.pressed && lastDirection === "right") {
     pacman.velocity.x = 3;
   }
 };
@@ -121,18 +123,22 @@ window.addEventListener("keydown", ({ key }) => {
     case "w":
     case "ArrowUp":
       keys.up.pressed = true;
+      lastDirection = "up";
       break;
     case "a":
     case "ArrowLeft":
       keys.left.pressed = true;
+      lastDirection = "left";
       break;
     case "s":
     case "ArrowDown":
       keys.down.pressed = true;
+      lastDirection = "down";
       break;
     case "d":
     case "ArrowRight":
       keys.right.pressed = true;
+      lastDirection = "right";
       break;
   }
 });
