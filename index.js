@@ -20,13 +20,6 @@ class Boundary {
     ctx.fillRect(this.position.x, this.position.y, this.width, this.height);
   }
 }
-const map = [
-  ["-", "-", "-", "-", "-", "-", "-"],
-  ["-", " ", " ", " ", " ", " ", "-"],
-  ["-", " ", "-", "-", "-", " ", "-"],
-  ["-", " ", " ", " ", " ", " ", "-"],
-  ["-", "-", "-", "-", "-", "-", "-"],
-];
 
 class Pacman {
   constructor({ position, velocity }) {
@@ -50,7 +43,6 @@ class Pacman {
   }
 }
 
-const boundaries = [];
 const pacman = new Pacman({
   position: {
     x: Boundary.width + Boundary.width / 2,
@@ -58,6 +50,31 @@ const pacman = new Pacman({
   },
   velocity: { x: 0, y: 0 },
 });
+
+const keys = {
+  up: {
+    pressed: false,
+  },
+  left: {
+    pressed: false,
+  },
+  down: {
+    pressed: false,
+  },
+  right: {
+    pressed: false,
+  },
+};
+
+const map = [
+  ["-", "-", "-", "-", "-", "-", "-"],
+  ["-", " ", " ", " ", " ", " ", "-"],
+  ["-", " ", "-", "-", "-", " ", "-"],
+  ["-", " ", " ", " ", " ", " ", "-"],
+  ["-", "-", "-", "-", "-", "-", "-"],
+];
+
+const boundaries = [];
 
 map.forEach((row, i) => {
   row.forEach((symbol, j) => {
@@ -83,6 +100,18 @@ const animate = () => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   boundaries.forEach((boundary) => boundary.draw());
   pacman.update();
+  pacman.velocity.y = 0;
+  pacman.velocity.x = 0;
+
+  if (keys.up.pressed) {
+    pacman.velocity.y = -3;
+  } else if (keys.left.pressed) {
+    pacman.velocity.x = -3;
+  } else if (keys.down.pressed) {
+    pacman.velocity.y = 3;
+  } else if (keys.right.pressed) {
+    pacman.velocity.x = 3;
+  }
 };
 
 animate();
@@ -91,42 +120,40 @@ window.addEventListener("keydown", ({ key }) => {
   switch (key) {
     case "w":
     case "ArrowUp":
-      pacman.velocity.y = -5;
+      keys.up.pressed = true;
       break;
     case "a":
     case "ArrowLeft":
-      pacman.velocity.x = -5;
+      keys.left.pressed = true;
       break;
     case "s":
     case "ArrowDown":
-      pacman.velocity.y = 5;
+      keys.down.pressed = true;
       break;
     case "d":
     case "ArrowRight":
-      pacman.velocity.x = 5;
+      keys.right.pressed = true;
       break;
   }
-  console.log(pacman.velocity);
 });
 
 window.addEventListener("keyup", ({ key }) => {
   switch (key) {
     case "w":
     case "ArrowUp":
-      pacman.velocity.y = 0;
+      keys.up.pressed = false;
       break;
     case "a":
     case "ArrowLeft":
-      pacman.velocity.x = 0;
+      keys.left.pressed = false;
       break;
     case "s":
     case "ArrowDown":
-      pacman.velocity.y = 0;
+      keys.down.pressed = false;
       break;
     case "d":
     case "ArrowRight":
-      pacman.velocity.x = 0;
+      keys.right.pressed = false;
       break;
   }
-  console.log(pacman.velocity);
 });
